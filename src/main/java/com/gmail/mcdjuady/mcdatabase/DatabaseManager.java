@@ -4,11 +4,13 @@
  */
 package com.gmail.mcdjuady.mcdatabase;
 
+import com.gmail.mcdjuady.mcdatabase.bridges.DatabaseBridgeFactory;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 /**
@@ -20,11 +22,19 @@ public class DatabaseManager {
     private static String global = "__GLOBAL__";
     private Map<String, Database> dbs;
     private DatabaseProvider factory;
+    private Plugin plugin;
+    private DatabaseBridgeFactory bridgeFactory;
+
+    public DatabaseManager(Plugin p) {
+        plugin = p;
+        bridgeFactory = DatabaseBridgeFactory.getInstance();
+    }
 
     private void searchForDB() throws DatabaseException {
         if (!Bukkit.getServicesManager().isProvidedFor(DatabaseProvider.class)) {
             Bukkit.getLogger().severe("[MCDatabase] No Database Service found. Disabling!");
-            throw new DatabaseException("No ServiceProvider found for Service "+DatabaseProvider.class.getSimpleName());
+            //Plugin should catch this and disable
+            throw new DatabaseException("No ServiceProvider found for Service " + DatabaseProvider.class.getSimpleName());
             //return;
         }
         RegisteredServiceProvider<DatabaseProvider> dbFactory = Bukkit.getServicesManager().getRegistration(DatabaseProvider.class);
@@ -39,11 +49,11 @@ public class DatabaseManager {
             return;
         }
         dbs = new ConcurrentHashMap<String, Database>();
-        dbs.putAll(factory.startup());
+        dbs.putAll(factory.startup(plugin));
     }
 
     public void shutdown() {
-        if (dbs==null) {
+        if (dbs == null) {
             return;
         }
         for (Database db : dbs.values()) {
@@ -69,7 +79,7 @@ public class DatabaseManager {
     }
 
     public Database createDatabase(String name) {
-        Database db = factory.newInstance(name);
+        Database db = factory.newInstance(plugin, name);
         dbs.put(name, db);
         return db;
     }
@@ -80,6 +90,14 @@ public class DatabaseManager {
             return;
         }
         db.close();
-        factory.delete(name);
+        factory.delete(plugin, name);
+    }
+
+    public Plugin getPlugin() {
+        return plugin;
+    }
+    
+    public DatabaseBridgeFactory getBridgeFactory() {
+        return bridgeFactory;
     }
 }
