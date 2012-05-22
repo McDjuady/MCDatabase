@@ -44,7 +44,7 @@ public class DatabaseSerializableBridge implements DatabaseBridge<Serializable> 
         } catch (IllegalAccessException ex) {
         } catch (ClassNotFoundException ex) {
         } finally {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load class{0} from database!", serClass);
+            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load class "+serClass+" from database!");
             return null;
         } 
     }

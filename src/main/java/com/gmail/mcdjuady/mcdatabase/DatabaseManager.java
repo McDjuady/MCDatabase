@@ -60,13 +60,16 @@ public class DatabaseManager {
             try {
                 db.save();
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Error! Failed to save Database {0} \n{1}", new Object[]{db.toString(), ex.getLocalizedMessage()});
+                Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Error! Failed to save Database "+db.toString()+" \n"+ex.getLocalizedMessage());
             }
             db.close();
         }
     }
 
     public Database getDatabase() {
+        if (!dbs.containsKey(global)) {
+            dbs.put(global, factory.newInstance(plugin, global));
+        }
         return dbs.get(global);
     }
 
@@ -80,6 +83,9 @@ public class DatabaseManager {
 
     public Database createDatabase(String name) {
         Database db = factory.newInstance(plugin, name);
+        if (db == null) {
+            return null;
+        }
         dbs.put(name, db);
         return db;
     }
@@ -90,7 +96,7 @@ public class DatabaseManager {
             return;
         }
         db.close();
-        factory.delete(plugin, name);
+        factory.delete(plugin, db);
     }
 
     public Plugin getPlugin() {

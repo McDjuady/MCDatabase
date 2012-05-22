@@ -80,7 +80,7 @@ public class DatabaseBridgeFactory {
     public <T> void translateAndSave(T o, DatabaseGroup group) {
         DatabaseBridge<T> bridge = getBridge(o);
         if (bridge == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to save object ({0}) to group {1}! No suitable bridge!", new Object[]{o.toString(), group.getName()});
+            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to save object ("+o.toString()+") to group {"+group.getName()+"}! No suitable bridge!");
             return;
         }
         bridge.translateAndSave(o, group);
@@ -89,12 +89,12 @@ public class DatabaseBridgeFactory {
     public <T> T loadAndTranslate(DatabaseGroup group) {
         DatabaseBridge<T> bridge = (DatabaseBridge<T>) getBridge(group);
         if (bridge == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load object from group {0}! No suitable bridge!", group.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load object from group "+group.getName()+"! No suitable bridge!");
             return null;
         }
         T o = bridge.loadAndTranslate(group);
         if (o == null) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load object from group {0}! Bridge returned null!", group.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load object from group "+group.getName()+"! Bridge returned null!");
         }
         return o;
     }

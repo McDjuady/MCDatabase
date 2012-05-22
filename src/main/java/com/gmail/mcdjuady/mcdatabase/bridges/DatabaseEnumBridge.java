@@ -39,7 +39,7 @@ public class DatabaseEnumBridge implements DatabaseBridge<Enum<?>> {
             }
             return Enum.valueOf(((Class<? extends Enum>) clss).asSubclass(Enum.class), group.getString("val"));
         } catch (ClassNotFoundException e) {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load class {0} from database!", name);
+            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load class "+name+" from database!");
             return null;
         }
     }

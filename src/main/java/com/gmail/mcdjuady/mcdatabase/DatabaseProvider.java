@@ -19,5 +19,5 @@ public interface DatabaseProvider {
 
     public Map<String, Database> startup(Plugin p); //initaly load all databases. Handled here because we wan't to allow databases that aren't stored in the basepath like mysql
 
-    public void delete(Plugin p, String name); //internal cleanup
+    public void delete(Plugin p, Database db); //internal cleanup
 }
