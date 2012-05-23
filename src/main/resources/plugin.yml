@@ -1,0 +1,9 @@
+name: MCDatabase
+version: 1.0
+description: Dynamic Minecraft Database
+# We could place every author in the authors list, but chose not to for illustrative purposes
+# Also, having an author distinguishes that person as the project lead, and ensures their 
+# name is displayed first
+author: McDjuady
+main: com.gmail.mcdjuady.mcdatabase.DatabasePlugin
+database: false
