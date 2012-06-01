@@ -36,17 +36,17 @@ public class DatabaseSerializableBridge implements DatabaseBridge<Serializable> 
                 return null;
             }
             Serializable ser = cls.asSubclass(Serializable.class).newInstance();
-            if (ser != null) {
-                ser.load(group);
+            if (ser != null &&group.hasSubgroup("data")) {
+                ser.load(group.getSubgroup("data"));
             }
             return ser;
         } catch (InstantiationException ex) {
-        } catch (IllegalAccessException ex) {
-        } catch (ClassNotFoundException ex) {
-        } finally {
-            Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load class "+serClass+" from database!");
             return null;
-        } 
+        } catch (IllegalAccessException ex) {
+            return null;
+        } catch (ClassNotFoundException ex) {
+            return null;
+        }
     }
 
     @Override

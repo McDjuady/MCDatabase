@@ -87,6 +87,9 @@ public class DatabaseBridgeFactory {
     }
 
     public <T> T loadAndTranslate(DatabaseGroup group) {
+        if (group == null) {
+            return null;
+        }
         DatabaseBridge<T> bridge = (DatabaseBridge<T>) getBridge(group);
         if (bridge == null) {
             Bukkit.getLogger().log(Level.SEVERE, "[MCDatabase] Failed to load object from group "+group.getName()+"! No suitable bridge!");
@@ -109,6 +112,9 @@ public class DatabaseBridgeFactory {
     }
 
     private DatabaseBridge getBridge(DatabaseGroup group) {
+        if (group == null) {
+            return null;
+        }
         for (DatabaseBridge bridge : bridges) {
             if (bridge.canTranslate(group)) {
                 return bridge;

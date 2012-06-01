@@ -7,6 +7,8 @@ package com.gmail.mcdjuady.mcdatabase.bridges;
 import com.gmail.mcdjuady.mcdatabase.DatabaseGroup;
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -87,6 +89,13 @@ public class DatabaseMapBridge implements DatabaseBridge<Map> {
 
     @Override
     public boolean canTranslate(DatabaseGroup group) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String clss = group.getString("class");
+        try {
+            Class<?> tclass = Class.forName(clss);
+            return Map.class.isAssignableFrom(tclass) && DatabaseBridgeFactory.getInstance().canTranslate(group.getSubgroup("keys")) && DatabaseBridgeFactory.getInstance().canTranslate(group.getSubgroup("values"));
+        } catch (ClassNotFoundException ex) {
+            return false;
+        }
+        
     }
 }

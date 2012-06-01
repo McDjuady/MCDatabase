@@ -23,7 +23,7 @@ public class DatabaseCollectionBridge implements DatabaseBridge<Collection> {
         }
         Object[] array = t.toArray();
         for (int i = 0; i < t.size(); i++) {
-            DatabaseGroup sub = group.createSubgroup(String.valueOf(i));
+            DatabaseGroup sub = group.createSubgroup("n"+i);
             //TODO Find solutions to fix unchecked
             DatabaseBridgeFactory.getInstance().translateAndSave(array[i], sub);
         }
@@ -41,19 +41,19 @@ public class DatabaseCollectionBridge implements DatabaseBridge<Collection> {
             @SuppressWarnings("unchecked")
             //We need to cast this to Collection<Object>. Else adding Elements is impossible
             Collection<Object> col = (Collection<Object>) ((Class<Collection<?>>) clss).newInstance();
-
+            if (size==0) {
+                return col;
+            }
             for (int i = 0; i < size; i++) {
-                DatabaseGroup sub = group.getSubgroup(String.valueOf(i));
+                DatabaseGroup sub = group.getSubgroup("n"+i);
                 col.add(DatabaseBridgeFactory.getInstance().loadAndTranslate(sub));
             }
             return col;
         } catch (InstantiationException e) {
         } catch (IllegalAccessException e) {
         } catch (ClassNotFoundException e) {
-        } finally {
-            //SpoutRPG.log(Level.WARNING, "DatabaseUtils|Collection", "Failed to load "+clssName+" from database!");
-            return null;
         }
+        return null;
     }
 
     @Override

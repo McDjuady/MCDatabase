@@ -10,7 +10,7 @@ import com.gmail.mcdjuady.mcdatabase.DatabaseGroup;
  *
  * @author McDjuady
  */
-public class DatabaseBooleanBridge implements DatabaseBridge<Boolean>{
+public class DatabaseBooleanBridge implements DatabaseBridge<Boolean> {
 
     @Override
     public void translateAndSave(Boolean t, DatabaseGroup group) {
@@ -30,7 +30,7 @@ public class DatabaseBooleanBridge implements DatabaseBridge<Boolean>{
 
     @Override
     public boolean canTranslate(DatabaseGroup group) {
-        return group.getString("class").equals("boolean");
+        String s = group.getString("class");
+        return s != null && s.equals("boolean");
     }
-    
 }
